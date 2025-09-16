@@ -1,12 +1,19 @@
 import type { System } from "~/core/engine";
 import { useGameStore } from "~/stores/game";
 import { useInput } from "~/composables/useInput";
+import { GameStateEnum } from "~/interfaces/types";
 
 export class MovementSystem implements System {
+    private gameStore = useGameStore();
     private player = useGameStore().player;
     private input = useInput();
 
     update(world: any, deltaTime: number): void {
+        // Only process movement if in the InGame state
+        if (this.gameStore.state !== GameStateEnum.IN_GAME) {
+            return;
+        }
+
         const speed = 5; // units per second
 
         console.log("MovementSystem updating", deltaTime);
