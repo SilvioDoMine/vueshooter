@@ -1,10 +1,21 @@
 import { defineStore } from "pinia";
-import { GameStateEnum } from "~/interfaces/types";
+import { Vector3 } from "three";
+import { GameStateEnum, type Player } from "~/interfaces/types";
 
 export const useGameStore = defineStore("game", () => {
   const coinPremium = ref(0);
   const coinGold = ref(0);
-  
+
+  const player = ref<Player>({
+    id: "player",
+    hp: 100,
+    maxHp: 100,
+    mesh: null,
+    position: new Vector3(0, 0, 0),
+    rotation: new Vector3(0, 0, 0),
+    velocity: new Vector3(0, 0, 0),
+  });
+
   const state = ref<GameStateEnum>(GameStateEnum.MAIN_MENU);
 
   function addGold(amount: number) {
@@ -21,5 +32,8 @@ export const useGameStore = defineStore("game", () => {
     coinPremium,
     addGold,
     addPremium,
+
+    // player
+    player,
   };
 });

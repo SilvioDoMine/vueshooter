@@ -9,6 +9,7 @@ export enum GameStateEnum {
 export type Player = {
     id: string;
     position: Vector3;
+    rotation: Vector3;
     velocity: Vector3;
     mesh: any; // Placeholder for Three.js Mesh or Object3D
     [key: string]: any; // Allow additional properties

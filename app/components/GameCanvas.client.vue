@@ -4,6 +4,7 @@ import { useInput } from "~/composables/useInput";
 import { Engine } from "~/core/Engine";
 import { SceneManager } from "~/scenes/SceneManager";
 import { useGameStore } from "~/stores/game";
+import { MovementSystem } from "~/systems/MovementSystem";
 
 // Canvas
 const gameCanvas = ref<HTMLCanvasElement>();
@@ -19,6 +20,7 @@ onMounted(() => {
   nextTick(() => {
     // Scene só pode ser criado após o canvas estar disponível
     const sceneManager = new SceneManager(gameCanvas.value);
+    const movementSystem = new MovementSystem();
 
     watch(() => game.state, (newState) => {
       // if (sceneManager.ready) {
@@ -28,6 +30,7 @@ onMounted(() => {
 
     // Adiciona o SceneManager ao Engine
     engine.add(sceneManager);
+    engine.add(movementSystem);
 
     // Delta time shenanigans
     let lastTime = performance.now();

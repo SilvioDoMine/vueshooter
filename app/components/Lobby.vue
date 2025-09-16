@@ -15,13 +15,20 @@ const gameStateStore = useGameStore();
         <h2 class="text-2xl font-bold">Spaceshooter!</h2>
       </template>
 
-      <div class="flex flex-row items-center justify-between">
-        <p class="text-sm font-bold">FASE 1</p>
-        <button class="bg-blue-500 font-bold text-white text-sm px-4 py-0.5 rounded hover:bg-blue-600" @click="gameStateStore.state = GameStateEnum.IN_GAME">INICIAR</button>
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-row items-center justify-between">
+          <p class="text-sm font-bold">Plutão</p>
+          <button class="bg-blue-500 font-bold text-white text-sm px-4 py-0.5 rounded hover:bg-blue-600" @click="gameStateStore.state = GameStateEnum.IN_GAME">INICIAR</button>
+        </div>
+
+        <div class="flex flex-row items-center justify-between">
+          <p class="text-sm font-bold">Venus</p>
+          <button class="bg-blue-500 font-bold text-white text-sm px-4 py-0.5 rounded hover:bg-blue-600" @click="gameStateStore.state = GameStateEnum.IN_GAME">INICIAR</button>
+        </div>
       </div>
       
       <template #footer>
-        <p class="text-sm text-gray-500">Game Version 1.0.0</p>
+        <p class="text-sm text-gray-500">Game Version 1.0.1</p>
       </template>
     </UCard>
 
