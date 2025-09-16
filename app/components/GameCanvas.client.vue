@@ -1,0 +1,57 @@
+<script setup lang="ts">
+import * as THREE from "three";
+import { useInput } from "~/composables/useInput";
+import { Engine } from "~/core/Engine";
+import { SceneManager } from "~/scenes/SceneManager";
+import { useGameStore } from "~/stores/game";
+
+// Canvas
+const gameCanvas = ref<HTMLCanvasElement>();
+
+// Engine
+const engine = new Engine('canvas');
+
+// Game state
+const game = useGameStore();
+
+onMounted(() => {
+  // É necessário esperar o próximo tick para garantir que o canvas esteja disponível
+  nextTick(() => {
+    // Scene só pode ser criado após o canvas estar disponível
+    const sceneManager = new SceneManager(gameCanvas.value);
+
+    watch(() => game.state, (newState) => {
+      // if (sceneManager.ready) {
+        sceneManager.setScene(newState);
+      // }
+    });
+
+    // Adiciona o SceneManager ao Engine
+    engine.add(sceneManager);
+
+    // Delta time shenanigans
+    let lastTime = performance.now();
+
+    // Game loop
+    const gameLoop = () => {
+      const now = performance.now();
+      const delta = (now - lastTime) / 1000; // Convert to seconds
+      lastTime = now;
+
+      // Update engine - this will update all systems internally
+      engine.update(delta);
+
+      // Chama novamente o gameloop
+      requestAnimationFrame(gameLoop);
+    };
+
+    requestAnimationFrame(gameLoop);
+  });
+});
+</script>
+
+<template>
+  <ClientOnly>
+    <canvas ref="gameCanvas" class="w-screen h-screen block"></canvas>
+  </ClientOnly>
+</template>

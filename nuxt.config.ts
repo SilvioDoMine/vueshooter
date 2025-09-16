@@ -5,6 +5,9 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/test-utils/module',
     '@nuxt/ui',
+    '@pinia/nuxt',
+    '@vueuse/nuxt'
   ],
   css: ['~/assets/css/main.css'],
+  ssr: false, // Three.js needs client-side rendering
 })
