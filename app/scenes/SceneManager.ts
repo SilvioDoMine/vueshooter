@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import type { System, World } from "~/core/Engine";
+import type { System, World } from "~/core/engine";
 import { GameStateEnum } from "~/interfaces/types";
 import type { BaseScene } from "./BaseScene";
 

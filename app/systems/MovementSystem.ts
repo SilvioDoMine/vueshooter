@@ -1,4 +1,4 @@
-import type { System } from "~/core/Engine";
+import type { System } from "~/core/engine";
 import { useGameStore } from "~/stores/game";
 import { useInput } from "~/composables/useInput";
 
