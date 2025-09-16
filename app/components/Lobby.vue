@@ -17,12 +17,12 @@ const gameStateStore = useGameStore();
 
       <div class="flex flex-col gap-4">
         <div class="flex flex-row items-center justify-between">
-          <p class="text-sm font-bold">Plutão</p>
+          <p class="text-sm font-bold">Fase 1</p>
           <button class="bg-blue-500 font-bold text-white text-sm px-4 py-0.5 rounded hover:bg-blue-600" @click="gameStateStore.state = GameStateEnum.IN_GAME">INICIAR</button>
         </div>
 
         <div class="flex flex-row items-center justify-between">
-          <p class="text-sm font-bold">Venus</p>
+          <p class="text-sm font-bold">Fase 2</p>
           <button class="bg-blue-500 font-bold text-white text-sm px-4 py-0.5 rounded hover:bg-blue-600" @click="gameStateStore.state = GameStateEnum.IN_GAME">INICIAR</button>
         </div>
       </div>
