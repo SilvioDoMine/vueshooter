@@ -2,6 +2,9 @@ import * as THREE from "three";
 import type { System, World } from "~/core/engine";
 import { GameStateEnum } from "~/interfaces/types";
 import type { BaseScene } from "./BaseScene";
+import { MainMenuScene } from "./MainMenuScene";
+import { LobbyScene } from "./LobbyScene";
+import { InGameScene } from "./InGameScene";
 
 export class SceneManager implements System {
     private scenes: Map<GameStateEnum, BaseScene> = new Map();
@@ -50,21 +53,28 @@ export class SceneManager implements System {
     private loadScenes(): void {
         if (this.ready) return;
 
+        this.scenes.set(GameStateEnum.MAIN_MENU, new MainMenuScene());
+        this.scenes.set(GameStateEnum.LOBBY, new LobbyScene());
+        this.scenes.set(GameStateEnum.IN_GAME, new InGameScene());
+
+        this.ready = true;
+        this.setScene(GameStateEnum.MAIN_MENU);
+
         // Dynamically import scenes
         // 1. Get all enum values
-        const sceneStates = Object.values(GameStateEnum);
+        // const sceneStates = Object.values(GameStateEnum);
 
         // 2. For each state, import the corresponding scene dynamically `${stateString}Scene`
         // 3. Instantiate the scene and store it in the map
         // 4. Mark scenes as ready
-        Promise.all(sceneStates.map(async (state) => {
-            const module = await import(`./${state}Scene`);
-            const SceneClass = module[`${state}Scene`];
-            const sceneInstance: BaseScene = new SceneClass();
-            this.scenes.set(state as GameStateEnum, sceneInstance);
-        })).then(() => {
-            this.ready = true;
-            this.setScene(GameStateEnum.MAIN_MENU);
-        });
+        // Promise.all(sceneStates.map(async (state) => {
+        //     const module = await import(`./${state}Scene`);
+        //     const SceneClass = module[`${state}Scene`];
+        //     const sceneInstance: BaseScene = new SceneClass();
+        //     this.scenes.set(state as GameStateEnum, sceneInstance);
+        // })).then(() => {
+        //     this.ready = true;
+        //     this.setScene(GameStateEnum.MAIN_MENU);
+        // });
     }
 }
