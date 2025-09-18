@@ -24,11 +24,11 @@ export class RunTimerScene extends BaseScene {
         //     0.1,
         //     100
         // );
-        this.camera.position.set(0, 10, 0);
+        this.camera.position.set(0, 20, 0);
         this.camera.lookAt(0, 0, 0);
 
-        // set color to gray
-        this.scene.background = new THREE.Color(0x808080);
+        // set color to black
+        this.scene.background = new THREE.Color(0x000000);
 
         this.createPlayer();
 
@@ -39,11 +39,22 @@ export class RunTimerScene extends BaseScene {
     public update(deltaTime: number, renderer: THREE.WebGLRenderer): void {
         // render the player mesh position based on player position
         if (this.player.mesh) {
+
+            // Atualiza a posição do grupo do player
             this.player.mesh.position.copy(this.player.position);
+
+            // Atualiza rotação do group do player
             this.player.mesh.rotation.set(
                 this.player.rotation.x,
                 this.player.rotation.y,
                 this.player.rotation.z
+            );
+
+            // Atualiza posição da câmera para seguir o jogador
+            this.camera.position.set(
+                this.player.position.x,
+                this.player.position.y + 20,
+                this.player.position.z
             );
         }
 
@@ -90,7 +101,7 @@ export class RunTimerScene extends BaseScene {
             const material = new THREE.MeshBasicMaterial({
                 color: index === 0 ? 0x00ff00 : 0x0000ff,
                 wireframe: true,
-                opacity: 0.5,
+                opacity: 0,
                 transparent: true
             });
     
@@ -108,6 +119,8 @@ export class RunTimerScene extends BaseScene {
 
             // Define o nome do mesh para identificação futura
             mesh.name = `hitbox_cillinder_${index}`;
+
+            playerGroup.scale.set(0.8, 0.8, 0.8); // Ajuste o tamanho conforme necessário
             
             // Adiciona o mesh ao grupo do player
             playerGroup.add(mesh);
@@ -136,7 +149,7 @@ export class RunTimerScene extends BaseScene {
             this.player.rotation.x,
             this.player.rotation.y,
             this.player.rotation.z
-        );
+        );    
 
         // Adiciona o group à cena
         this.scene.add(playerGroup);

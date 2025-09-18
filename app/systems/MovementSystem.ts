@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import type { System } from "~/core/engine";
 import { useGameStore } from "~/stores/game";
 import { useInput } from "~/composables/useInput";
@@ -14,7 +15,7 @@ export class MovementSystem implements System {
             return;
         }
 
-        const speed = 5; // units per second
+        const speed = this.player.speed; // units per second
 
         // Reset velocity
         this.player.velocity.set(0, 0, 0);
@@ -58,9 +59,29 @@ export class MovementSystem implements System {
         // Update position based on velocity and deltaTime
         this.player.position.addScaledVector(this.player.velocity, deltaTime);
 
-        // Update the player's mesh position if it exists
+        // Smooth rotation based on movement direction
+        if (this.player.velocity.length() > 0.1) {
+            const targetAngle = Math.atan2(-this.player.velocity.x, -this.player.velocity.z);
+
+            // Calculate shortest angular distance
+            let angleDiff = targetAngle - this.player.rotation.y;
+
+            // Normalize angle difference to [-π, π]
+            while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+            while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+
+            // Apply smooth rotation using shortest path
+            this.player.rotation.y += angleDiff * deltaTime * 5;
+        }
+
+        // Update the player's mesh position and rotation if it exists
         if (this.player.mesh) {
             this.player.mesh.position.copy(this.player.position);
+            this.player.mesh.rotation.set(
+                this.player.rotation.x,
+                this.player.rotation.y,
+                this.player.rotation.z
+            );
         }
     }
 

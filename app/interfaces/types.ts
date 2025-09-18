@@ -34,6 +34,7 @@ export type Player = {
     position: Vector3;
     rotation: Vector3;
     velocity: Vector3;
+    speed: number;
     mesh: Group | null; // Placeholder for Three.js Group, Mesh or Object3D
     hitbox: Hitbox;
     [key: string]: any; // Allow additional properties
