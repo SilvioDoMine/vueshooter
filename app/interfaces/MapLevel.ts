@@ -11,5 +11,6 @@ export interface IMapLevel {
 }
 
 export interface IMap {
+  bounds: { xMin: number; xMax: number; zMin: number; zMax: number };
   levels: Record<number, IMapLevel>;
 }

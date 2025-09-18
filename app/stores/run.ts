@@ -10,6 +10,7 @@ export const useRunStore = defineStore("run", () => {
   const isPaused = ref<boolean>(false);
 
   const firstMap: IMap = {
+    bounds: { xMin: -10, xMax: 10, zMin: -10, zMax: 10 },
     levels: {
       1: { type: MapLevelType.START },
       2: { type: MapLevelType.WAVE, enemies: 4 },
@@ -35,6 +36,7 @@ export const useRunStore = defineStore("run", () => {
   };
 
   const secondMap: IMap = {
+    bounds: { xMin: -20, xMax: 20, zMin: -20, zMax: 20 },
     levels: {
       1: { type: MapLevelType.START },
       2: { type: MapLevelType.WAVE, enemies: 6 },

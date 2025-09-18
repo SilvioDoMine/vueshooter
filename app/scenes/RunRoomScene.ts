@@ -15,7 +15,8 @@ export class RunRoomScene extends BaseScene {
 
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.camera.position.z = 5;
+        this.camera.position.set(0, 20, 0);
+        this.camera.lookAt(0, 0, 0);
 
         // set color to pink
         this.scene.background = new THREE.Color(0xffc0cb);

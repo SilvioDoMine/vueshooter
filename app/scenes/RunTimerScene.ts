@@ -38,19 +38,13 @@ export class RunTimerScene extends BaseScene {
 
         // display a grid on the ground
         if (!this.scene.getObjectByName("gridHelper")) {
-            const gridHelper = new THREE.GridHelper(100, 100);
+            const gridHelper = new THREE.GridHelper(
+                this.runStore.currentMap.bounds.xMax * 2,
+                this.runStore.currentMap.bounds.xMax * 2
+            );
+
             gridHelper.name = "gridHelper";
             this.scene.add(gridHelper);
-        }
-
-        // display a grid on the other axis
-        if (!this.scene.getObjectByName("gridHelperY")) {
-            const gridHelperY = new THREE.GridHelper(100, 100);
-            gridHelperY.rotation.x = Math.PI / 2;
-            gridHelperY.name = "gridHelperY";
-            // must be red
-            gridHelperY.material.color.set(0xff0000);
-            this.scene.add(gridHelperY);
         }
     }
 
