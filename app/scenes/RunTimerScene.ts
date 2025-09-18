@@ -15,7 +15,15 @@ export class RunTimerScene extends BaseScene {
 
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.camera.position.set(0, 20, 0);
+        // this.camera = new THREE.OrthographicCamera(
+        //     window.innerWidth / -64,
+        //     window.innerWidth / 64,
+        //     window.innerHeight / 64,
+        //     window.innerHeight / -64,
+        //     0.1,
+        //     100
+        // );
+        this.camera.position.set(0, 10, 0);
         this.camera.lookAt(0, 0, 0);
 
         // set color to gray
@@ -27,7 +35,7 @@ export class RunTimerScene extends BaseScene {
         this.setWorld(null); // Replace null with actual world object if available
     }
     
-    public update(deltaTime: number): void {
+    public update(deltaTime: number, renderer: THREE.WebGLRenderer): void {
         // render the player mesh position based on player position
         if (this.player.mesh) {
             this.player.mesh.position.copy(this.player.position);
@@ -53,14 +61,64 @@ export class RunTimerScene extends BaseScene {
         console.log("InGameScene disposed.");
     }
 
+    /** 
+     * Create player with hitbox and collider, add it to scene.
+     */
     private createPlayer(): void {
-        // Create the player square and add to scene at correct position
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        const playerMesh = new THREE.Mesh(geometry, material);
-        playerMesh.position.copy(this.player.position);
-        this.player.mesh = playerMesh; // Store reference to mesh
-        this.scene.add(playerMesh);
+        // Cria o grupo do player
+        const playerGroup = new THREE.Group();
+
+        // Cria a capsula de colisão deitada
+        const hitboxes = this.player.hitbox;
+
+        // Adiciona cada cillinder do hitbox ao grupo do player
+        hitboxes.cillinders.forEach((cillinder, index) => {
+            // Cria a geometria da cápsula
+            const geometry = new THREE.CapsuleGeometry(
+                cillinder.radius,
+                cillinder.height - 2 * cillinder.radius,
+                4,
+                8
+            );
+
+            const material = new THREE.MeshBasicMaterial({
+                color: index === 0 ? 0x00ff00 : 0x0000ff,
+                wireframe: true,
+                opacity: 0.5,
+                transparent: true
+            });
+    
+            const mesh = new THREE.Mesh(geometry, material);
+
+            mesh.position.set(
+                cillinder.offsetX,
+                0,
+                cillinder.offsetZ
+            );
+
+            // rotaciona a capsula de colisão para ficar deitada
+            mesh.rotation.z = Math.PI / 2; // Converte graus para radianos
+            mesh.rotation.y = cillinder.rotation; // Deita a capsula
+
+            // Define o nome do mesh para identificação futura
+            mesh.name = `hitbox_cillinder_${index}`;
+            
+            // Adiciona o mesh ao grupo do player
+            playerGroup.add(mesh);
+        });
+
+        // Crio o player em formato de cubo
+        const playerCube = new THREE.Mesh(
+            new THREE.BoxGeometry(0.5, 0.5, 0.5),
+            new THREE.MeshBasicMaterial({ color: 0xff0000 })
+        );
+
+        playerGroup.add(playerCube);
+
+        // Adiciona o group à cena
+        this.scene.add(playerGroup);
+
+        this.player.mesh = playerGroup;
     }
 
     private setWorld(world: any): void {

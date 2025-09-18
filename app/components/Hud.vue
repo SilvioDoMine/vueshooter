@@ -8,7 +8,7 @@ const runStore = useRunStore();
 </script>
 
 <template>
-    <div v-if="[GameStateEnum.IN_GAME_1, GameStateEnum.IN_GAME_2].includes(gameStateStore.state)" class="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
+    <div v-if="[GameStateEnum.IN_GAME_1, GameStateEnum.IN_GAME_2].includes(gameStateStore.state)" class="pointer-events-none absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
         <h1 class="text-white text-4xl animate-pulse">HUD Component - To be implemented</h1>
 
         <!-- Create absolute div that display axys X Y Z on the screen to help me -->

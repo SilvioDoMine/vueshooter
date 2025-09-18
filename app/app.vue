@@ -11,7 +11,7 @@ const game = useGameStore();
     <GameCanvas />
 
     <!-- HTML UI -->
-    <UApp>
+    <UApp class="pointer-events-none">
       <Hud />
       <Lobby />
       <MainMenu />

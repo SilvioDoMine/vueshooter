@@ -40,7 +40,7 @@ export class SceneManager implements System {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         
         // Update the current scene
-        this.currentScene.update(deltaTime);
+        this.currentScene.update(deltaTime, this.renderer);
 
         // Render the current scene
         this.renderer.render(this.currentScene.getScene(), this.currentScene.getCamera());

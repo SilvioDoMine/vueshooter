@@ -12,6 +12,14 @@ export const useGameStore = defineStore("game", () => {
     hp: 100,
     maxHp: 100,
     mesh: null,
+    hitbox: {
+      fromX: 0,
+      fromZ: 0,
+      cillinders: [
+        { offsetX: 0, offsetZ: 0, radius: 0.2, height: 1.5, rotation: Math.PI / 2 }, // Main body
+        { offsetX: 0, offsetZ: 0.2, radius: 0.1, height: 1.0, rotation: Math.PI / 1 }, // Left and right wing
+      ]
+    },
     position: new Vector3(0, 0, 0),
     rotation: new Vector3(0, 0, 0),
     velocity: new Vector3(0, 0, 0),
