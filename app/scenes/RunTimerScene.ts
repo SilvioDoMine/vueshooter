@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/Addons.js";
 import { BaseScene } from "./BaseScene";
 
 export class RunTimerScene extends BaseScene {
@@ -39,6 +40,11 @@ export class RunTimerScene extends BaseScene {
         // render the player mesh position based on player position
         if (this.player.mesh) {
             this.player.mesh.position.copy(this.player.position);
+            this.player.mesh.rotation.set(
+                this.player.rotation.x,
+                this.player.rotation.y,
+                this.player.rotation.z
+            );
         }
 
         // Tick the run
@@ -107,13 +113,30 @@ export class RunTimerScene extends BaseScene {
             playerGroup.add(mesh);
         });
 
-        // Crio o player em formato de cubo
-        const playerCube = new THREE.Mesh(
-            new THREE.BoxGeometry(0.5, 0.5, 0.5),
-            new THREE.MeshBasicMaterial({ color: 0xff0000 })
-        );
+        // Importo o modelo 3D do player ship
+        const loader = new GLTFLoader();
+        loader.load("/models/ship.glb", (gltf) => {
+            const model = gltf.scene;
+            model.scale.set(1, 1, 1); // Ajuste o tamanho conforme necessário
+            model.rotation.y = Math.PI; // Rotaciona o modelo para frente
+            model.rotation.z = Math.PI / 2; // Deita o modelo
+            model.position.y = 0; // Ajusta a altura do modelo conforme necessário
+            model.position.x = -0.165;
+            playerGroup.add(model);
+        }, undefined, (error) => {
+            console.log(error);
+            console.error("Error loading player model:", error);
+        });
 
-        playerGroup.add(playerCube);
+        // Define a posição inicial do grupo do player
+        playerGroup.position.copy(this.player.position);
+
+        // Define rotação do group do player
+        playerGroup.rotation.set(
+            this.player.rotation.x,
+            this.player.rotation.y,
+            this.player.rotation.z
+        );
 
         // Adiciona o group à cena
         this.scene.add(playerGroup);
