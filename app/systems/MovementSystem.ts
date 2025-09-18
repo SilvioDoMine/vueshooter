@@ -1,13 +1,13 @@
 import * as THREE from "three";
 import type { System } from "~/core/engine";
 import { useGameStore } from "~/stores/game";
-import { useInput } from "~/composables/useInput";
+import { useInputStore } from "~/stores/input";
 import { GameStateEnum } from "~/interfaces/types";
 
 export class MovementSystem implements System {
     private gameStore = useGameStore();
     private player = useGameStore().player;
-    private input = useInput();
+    private inputStore = useInputStore();
     private runStore = useRunStore();
 
     update(world: any, deltaTime: number): void {
@@ -20,34 +20,57 @@ export class MovementSystem implements System {
         // Reset velocity
         this.player.velocity.set(0, 0, 0);
 
-        // check input state with bounds
-        if (this.input.state.keyboard.keys.has("w") || this.input.state.keyboard.keys.has("ArrowUp")) {
-            // check bounds
-            if (this.player.position.z <= this.runStore.currentMap.bounds.zMin) {
-                this.player.position.z = this.runStore.currentMap.bounds.zMin;
-            } else {
-                this.player.velocity.z -= speed;
+        // Joystick input (takes priority over keyboard)
+        if (this.inputStore.state.joystick.isActive) {
+            const joystickX = this.inputStore.state.joystick.x;
+            const joystickY = this.inputStore.state.joystick.y;
+
+            console.log('Movement system - joystick active:', { x: joystickX, y: joystickY, distance: this.inputStore.state.joystick.distance });
+
+            // Convert joystick input to velocity (Y is inverted for correct direction)
+            this.player.velocity.x = joystickX * speed;
+            this.player.velocity.z = joystickY * speed;
+
+            // Apply bounds checking for joystick movement
+            const newX = this.player.position.x + this.player.velocity.x * deltaTime;
+            const newZ = this.player.position.z + this.player.velocity.z * deltaTime;
+
+            if (newX <= this.runStore.currentMap.bounds.xMin || newX >= this.runStore.currentMap.bounds.xMax) {
+                this.player.velocity.x = 0;
             }
-        }
-        if (this.input.state.keyboard.keys.has("s") || this.input.state.keyboard.keys.has("ArrowDown")) {
-            if (this.player.position.z >= this.runStore.currentMap.bounds.zMax) {
-                this.player.position.z = this.runStore.currentMap.bounds.zMax;
-            } else {
-                this.player.velocity.z += speed;
+            if (newZ <= this.runStore.currentMap.bounds.zMin || newZ >= this.runStore.currentMap.bounds.zMax) {
+                this.player.velocity.z = 0;
             }
-        }
-        if (this.input.state.keyboard.keys.has("a") || this.input.state.keyboard.keys.has("ArrowLeft")) {
-            if (this.player.position.x <= this.runStore.currentMap.bounds.xMin) {
-                this.player.position.x = this.runStore.currentMap.bounds.xMin;
-            } else {
-                this.player.velocity.x -= speed;
+        } else {
+            // Keyboard input (fallback when joystick is not active)
+            if (this.inputStore.state.keyboard.keys.has("w") || this.inputStore.state.keyboard.keys.has("ArrowUp")) {
+                // check bounds
+                if (this.player.position.z <= this.runStore.currentMap.bounds.zMin) {
+                    this.player.position.z = this.runStore.currentMap.bounds.zMin;
+                } else {
+                    this.player.velocity.z -= speed;
+                }
             }
-        }
-        if (this.input.state.keyboard.keys.has("d") || this.input.state.keyboard.keys.has("ArrowRight")) {
-            if (this.player.position.x >= this.runStore.currentMap.bounds.xMax) {
-                this.player.position.x = this.runStore.currentMap.bounds.xMax;
-            } else {
-                this.player.velocity.x += speed;
+            if (this.inputStore.state.keyboard.keys.has("s") || this.inputStore.state.keyboard.keys.has("ArrowDown")) {
+                if (this.player.position.z >= this.runStore.currentMap.bounds.zMax) {
+                    this.player.position.z = this.runStore.currentMap.bounds.zMax;
+                } else {
+                    this.player.velocity.z += speed;
+                }
+            }
+            if (this.inputStore.state.keyboard.keys.has("a") || this.inputStore.state.keyboard.keys.has("ArrowLeft")) {
+                if (this.player.position.x <= this.runStore.currentMap.bounds.xMin) {
+                    this.player.position.x = this.runStore.currentMap.bounds.xMin;
+                } else {
+                    this.player.velocity.x -= speed;
+                }
+            }
+            if (this.inputStore.state.keyboard.keys.has("d") || this.inputStore.state.keyboard.keys.has("ArrowRight")) {
+                if (this.player.position.x >= this.runStore.currentMap.bounds.xMax) {
+                    this.player.position.x = this.runStore.currentMap.bounds.xMax;
+                } else {
+                    this.player.velocity.x += speed;
+                }
             }
         }
 

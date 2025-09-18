@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { useInput } from "~/composables/useInput";
+import { useInputStore } from "~/stores/input";
 import { useGameStore } from "~/stores/game";
 
-const input = useInput();
+const inputStore = useInputStore();
 const game = useGameStore();
+
+// Setup input event listeners
+inputStore.setupEventListeners();
 </script>
 
 <template>

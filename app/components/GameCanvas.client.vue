@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import * as THREE from "three";
-import { useInput } from "~/composables/useInput";
 import { Engine } from "~/core/engine";
 import { SceneManager } from "~/scenes/SceneManager";
 import { useGameStore } from "~/stores/game";

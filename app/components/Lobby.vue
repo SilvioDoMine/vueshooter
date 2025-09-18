@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useGameStore } from "~/stores/game";
-import { useInput } from "~/composables/useInput";
+import { useInputStore } from "~/stores/input";
 import { GameStateEnum } from "~/interfaces/types";
 
-const { state } = useInput();
+const inputStore = useInputStore();
 const gameStateStore = useGameStore();
 const runStore = useRunStore();
 </script>

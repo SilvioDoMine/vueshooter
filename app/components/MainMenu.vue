@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useGameStore } from "~/stores/game";
-import { useInput } from "~/composables/useInput";
+import { useInputStore } from "~/stores/input";
 import { GameStateEnum } from "~/interfaces/types";
 
-const { state } = useInput();
+const inputStore = useInputStore();
 const gameStateStore = useGameStore();
 
-watch(() => state.keyboard, (keys: { keys: string[] }) => {
+watch(() => inputStore.state.keyboard, (keys: { keys: string[] }) => {
   if (keys.keys.has(" ") || keys.keys.has("Enter")) {
     if (gameStateStore.state === GameStateEnum.MAIN_MENU) {
       gameStateStore.state = GameStateEnum.LOBBY;

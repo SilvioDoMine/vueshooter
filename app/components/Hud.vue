@@ -17,5 +17,8 @@ const runStore = useRunStore();
             <p>Z: {{ gameStateStore.player.position.z.toFixed(10) }}</p>
             <p>Elapsed Time: {{ runStore.elapsedTime.toFixed(2) }}</p>
         </div>
+
+        <!-- Joystic Gameplay -->
+        <GameplayJoystick />
     </div>
 </template>
