@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { BaseScene } from "./BaseScene";
 
-export class InGameScene extends BaseScene {
+export class RunRoomScene extends BaseScene {
     private player = useGameStore().player;
     private runStore = useRunStore();
 
@@ -16,6 +16,9 @@ export class InGameScene extends BaseScene {
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.camera.position.z = 5;
+
+        // set color to pink
+        this.scene.background = new THREE.Color(0xffc0cb);
 
         this.createPlayer();
 

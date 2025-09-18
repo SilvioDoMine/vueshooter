@@ -5,6 +5,8 @@ import type { BaseScene } from "./BaseScene";
 import { MainMenuScene } from "./MainMenuScene";
 import { LobbyScene } from "./LobbyScene";
 import { InGameScene } from "./InGameScene";
+import { RunTimerScene } from "./RunTimerScene";
+import { RunRoomScene } from "./RunRoomScene";
 
 export class SceneManager implements System {
     private scenes: Map<GameStateEnum, BaseScene> = new Map();
@@ -56,6 +58,9 @@ export class SceneManager implements System {
         this.scenes.set(GameStateEnum.MAIN_MENU, new MainMenuScene());
         this.scenes.set(GameStateEnum.LOBBY, new LobbyScene());
         this.scenes.set(GameStateEnum.IN_GAME, new InGameScene());
+
+        this.scenes.set(GameStateEnum.IN_GAME_1, new RunTimerScene());
+        this.scenes.set(GameStateEnum.IN_GAME_2, new RunRoomScene());
 
         this.ready = true;
         this.setScene(GameStateEnum.MAIN_MENU);

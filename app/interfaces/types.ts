@@ -4,6 +4,8 @@ export enum GameStateEnum {
     MAIN_MENU = "MainMenu",
     LOBBY = "Lobby",
     IN_GAME = "InGame",
+    IN_GAME_1 = "World1", // --- IGNORE ---
+    IN_GAME_2 = "World2", // --- IGNORE ---
 };
 
 export type Player = {

@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { BaseScene } from "./BaseScene";
 
-export class InGameScene extends BaseScene {
+export class RunTimerScene extends BaseScene {
     private player = useGameStore().player;
     private runStore = useRunStore();
 
@@ -15,7 +15,11 @@ export class InGameScene extends BaseScene {
 
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.camera.position.z = 5;
+        this.camera.position.set(0, 20, 0);
+        this.camera.lookAt(0, 0, 0);
+
+        // set color to gray
+        this.scene.background = new THREE.Color(0x808080);
 
         this.createPlayer();
 

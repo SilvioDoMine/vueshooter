@@ -9,3 +9,7 @@ export interface IMapLevel {
   type: MapLevelType;
   enemies?: number;
 }
+
+export interface IMap {
+  levels: Record<number, IMapLevel>;
+}

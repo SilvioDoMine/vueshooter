@@ -14,14 +14,15 @@ export class LobbyScene extends BaseScene {
     
     init(): void {
         // Initialize scene objects here
+        console.log("LobbyScene initializing...");
     }
 
     update(deltaTime: number): void {
         // Update scene objects here
-        console.log("LobbyScene updating", deltaTime);
     }
 
     dispose(): void {
         // Clean up resources here
+        console.log("LobbyScene disposed.");
     }
 }

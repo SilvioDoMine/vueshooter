@@ -10,13 +10,11 @@ export class MovementSystem implements System {
 
     update(world: any, deltaTime: number): void {
         // Only process movement if in the InGame state
-        if (this.gameStore.state !== GameStateEnum.IN_GAME) {
+        if (this.gameStore.state in [GameStateEnum.MAIN_MENU, GameStateEnum.LOBBY]) {
             return;
         }
 
         const speed = 5; // units per second
-
-        console.log("MovementSystem updating", deltaTime);
 
         // Reset velocity
         this.player.velocity.set(0, 0, 0);

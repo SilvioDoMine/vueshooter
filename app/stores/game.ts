@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { Vector3 } from "three";
+import type { World } from "~/core/engine";
 import { GameStateEnum, type Player } from "~/interfaces/types";
 
 export const useGameStore = defineStore("game", () => {
@@ -15,6 +16,8 @@ export const useGameStore = defineStore("game", () => {
     rotation: new Vector3(0, 0, 0),
     velocity: new Vector3(0, 0, 0),
   });
+
+  const currentWorld = ref<World>();
 
   const state = ref<GameStateEnum>(GameStateEnum.MAIN_MENU);
 
