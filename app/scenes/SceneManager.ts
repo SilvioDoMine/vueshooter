@@ -82,4 +82,46 @@ export class SceneManager implements System {
         //     this.setScene(GameStateEnum.MAIN_MENU);
         // });
     }
+
+    public handleResize(aspect: number): void {
+        console.log('🖥️ SceneManager handling resize:', {
+            size: { width: window.innerWidth, height: window.innerHeight },
+            aspect: aspect.toFixed(3)
+        });
+
+        // Atualizar o renderer
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+
+        // Atualizar a câmera da cena atual se for uma RunTimerScene
+        if (this.currentScene && this.currentScene instanceof RunTimerScene) {
+            this.currentScene.updateCameraForResize(aspect);
+        } else if (this.currentScene) {
+            // Para outras cenas, fazer update básico da câmera
+            const camera = this.currentScene.getCamera();
+            if (camera instanceof THREE.PerspectiveCamera) {
+                camera.aspect = aspect;
+                camera.updateProjectionMatrix();
+            }
+        }
+
+        console.log('📷 Scene camera updated for resize');
+    }
+
+    public dispose(): void {
+
+        // Limpar cenas
+        this.scenes.forEach(scene => {
+            scene.dispose();
+        });
+        
+        this.scenes.clear();
+
+        // Limpar renderer
+        if (this.renderer) {
+            this.renderer.dispose();
+        }
+
+        console.log('✅ SceneManager disposed');
+    }
 }

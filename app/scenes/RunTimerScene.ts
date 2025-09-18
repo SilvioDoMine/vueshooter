@@ -1,31 +1,33 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/Addons.js";
 import { BaseScene } from "./BaseScene";
+import { CameraController } from "~/systems/CameraController";
 
 export class RunTimerScene extends BaseScene {
     private player = useGameStore().player;
     private runStore = useRunStore();
+    private cameraController!: CameraController;
 
     constructor() {
         super();
     }
     
     public init(): void {
-        // Initialize scene objects here
-        console.log("InGameScene initializing...");
+        console.log("RunTimerScene initializing...");
 
         this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        // this.camera = new THREE.OrthographicCamera(
-        //     window.innerWidth / -64,
-        //     window.innerWidth / 64,
-        //     window.innerHeight / 64,
-        //     window.innerHeight / -64,
-        //     0.1,
-        //     100
-        // );
-        this.camera.position.set(0, 20, 0);
-        this.camera.lookAt(0, 0, 0);
+
+        const aspect = window.innerWidth / window.innerHeight;
+
+        // Criar controller de câmera
+        this.cameraController = new CameraController(aspect, this.runStore.currentMap.bounds);
+        this.camera = this.cameraController.getCamera();
+
+        // Definir jogador como alvo da câmera
+        this.cameraController.setTarget({
+            x: this.player.position.x,
+            z: this.player.position.z
+        });
 
         // set color to black
         this.scene.background = new THREE.Color(0x000000);
@@ -34,6 +36,27 @@ export class RunTimerScene extends BaseScene {
 
         // Example: Set world (if needed)
         this.setWorld(null); // Replace null with actual world object if available
+
+        // Display grid baseado nos bounds do mapa (grid maior que o viewport)
+        if (!this.scene.getObjectByName("gridHelper")) {
+            const mapBounds = this.runStore.currentMap.bounds;
+            const gridSize = Math.max(
+                mapBounds.xMax - mapBounds.xMin,
+                mapBounds.zMax - mapBounds.zMin
+            );
+
+            const gridHelper = new THREE.GridHelper(gridSize, Math.min(gridSize, 50));
+            gridHelper.name = "gridHelper";
+
+            // Centralizar o grid no centro do mapa
+            gridHelper.position.set(
+                (mapBounds.xMin + mapBounds.xMax) / 2,
+                0,
+                (mapBounds.zMin + mapBounds.zMax) / 2
+            );
+
+            this.scene.add(gridHelper);
+        }
     }
     
     public update(deltaTime: number, renderer: THREE.WebGLRenderer): void {
@@ -50,32 +73,35 @@ export class RunTimerScene extends BaseScene {
                 this.player.rotation.z
             );
 
-            // Atualiza posição da câmera para seguir o jogador
-            this.camera.position.set(
-                this.player.position.x,
-                this.player.position.y + 20,
-                this.player.position.z
-            );
+            // Atualizar posição alvo da câmera
+            this.cameraController.setTarget({
+                x: this.player.position.x,
+                z: this.player.position.z
+            });
+
+            // Atualizar câmera
+            this.cameraController.update();
         }
 
         // Tick the run
         this.runStore.tick(deltaTime);
-
-        // display a grid on the ground
-        if (!this.scene.getObjectByName("gridHelper")) {
-            const gridHelper = new THREE.GridHelper(
-                this.runStore.currentMap.bounds.xMax * 2,
-                this.runStore.currentMap.bounds.xMax * 2
-            );
-
-            gridHelper.name = "gridHelper";
-            this.scene.add(gridHelper);
-        }
     }
 
     public dispose(): void {
         // Clean up resources here
-        console.log("InGameScene disposed.");
+        if (this.cameraController) {
+            this.cameraController.dispose();
+        }
+        console.log("RunTimerScene disposed.");
+    }
+
+    /**
+     * Atualiza a configuração da câmera para um novo aspect ratio
+     */
+    public updateCameraForResize(aspect: number): void {
+        if (this.cameraController) {
+            this.cameraController.updateForResize(aspect);
+        }
     }
 
     /** 
