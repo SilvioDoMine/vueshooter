@@ -230,6 +230,13 @@ onUnmounted(() => {
   -webkit-touch-callout: none;
   pointer-events: all;
   opacity: 0.6;
+  display: none;
+}
+
+@media (max-width: 768px), (orientation: portrait) {
+  .joystick-container {
+    display: block;
+  }
 }
 
 .joystick-base {
