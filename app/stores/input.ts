@@ -44,11 +44,6 @@ export const useInputStore = defineStore('input', () => {
     state.joystick.angle = data.angle
     state.joystick.distance = data.distance
     state.joystick.isActive = data.distance > 0
-
-    // Debug log
-    if (data.distance > 0) {
-      console.log('Joystick update:', { x: data.x, y: data.y, distance: data.distance, isActive: state.joystick.isActive })
-    }
   }
 
   // Event listeners setup
@@ -74,8 +69,13 @@ export const useInputStore = defineStore('input', () => {
       state.keyboard.keys.delete(event.key)
     })
 
-    useEventListener('touchstart', () => {
-      state.mouse.isDown = true
+    useEventListener('touchstart', (event) => {
+      state.mouse.isDown = true;
+
+      if (event.touches.length > 0) {
+        state.mouse.x = event.touches[0]?.clientX ?? 0
+        state.mouse.y = event.touches[0]?.clientY ?? 0
+      }
     })
 
     useEventListener('touchend', () => {

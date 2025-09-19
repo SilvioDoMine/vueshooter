@@ -25,8 +25,6 @@ export class MovementSystem implements System {
             const joystickX = this.inputStore.state.joystick.x;
             const joystickY = this.inputStore.state.joystick.y;
 
-            console.log('Movement system - joystick active:', { x: joystickX, y: joystickY, distance: this.inputStore.state.joystick.distance });
-
             // Convert joystick input to velocity (Y is inverted for correct direction)
             this.player.velocity.x = joystickX * speed;
             this.player.velocity.z = joystickY * speed;
