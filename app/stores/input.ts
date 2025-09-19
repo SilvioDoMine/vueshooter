@@ -73,6 +73,14 @@ export const useInputStore = defineStore('input', () => {
     useEventListener('keyup', (event) => {
       state.keyboard.keys.delete(event.key)
     })
+
+    useEventListener('touchstart', () => {
+      state.mouse.isDown = true
+    })
+
+    useEventListener('touchend', () => {
+      state.mouse.isDown = false
+    })
   }
 
   return {
