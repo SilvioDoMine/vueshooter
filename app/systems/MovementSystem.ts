@@ -93,8 +93,10 @@ export class MovementSystem implements System {
             while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
             while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
 
+            const turningSpeed = 10; // radians per second
+
             // Apply smooth rotation using shortest path
-            this.player.rotation.y += angleDiff * deltaTime * 5;
+            this.player.rotation.y += angleDiff * deltaTime * turningSpeed;
         }
 
         // Update the player's mesh position and rotation if it exists
