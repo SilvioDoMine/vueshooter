@@ -30,7 +30,7 @@ const getPointerPosition = (event: TouchEvent | MouseEvent) => {
 const teleportJoystick = (clientX: number, clientY: number) => {
   if (!joystickBase.value) return
 
-  const joystickRadius = 60
+  const joystickRadius = window.innerWidth <= 768 || window.innerHeight > window.innerWidth ? 50 : 60
   const viewportWidth = window.innerWidth
   const viewportHeight = window.innerHeight
 
@@ -39,8 +39,11 @@ const teleportJoystick = (clientX: number, clientY: number) => {
 
   joystickPosition.value = { x, y }
 
+  // Override CSS positioning with absolute positioning
+  joystickBase.value.style.position = 'fixed'
   joystickBase.value.style.left = `${x - joystickRadius}px`
   joystickBase.value.style.top = `${y - joystickRadius}px`
+  joystickBase.value.style.transform = 'none'
 }
 
 const handleScreenTouch = (event: TouchEvent | MouseEvent) => {
@@ -114,10 +117,21 @@ const handleMove = (event: TouchEvent | MouseEvent) => {
 const resetToInitialPosition = () => {
   if (!joystickBase.value || !joystickContainer.value) return
 
-  joystickPosition.value = { ...initialPosition.value }
+  // Reset to CSS positioning
+  joystickBase.value.style.position = ''
+  joystickBase.value.style.left = ''
+  joystickBase.value.style.top = ''
+  joystickBase.value.style.transform = ''
 
-  joystickBase.value.style.left = `${initialPosition.value.x - 60}px`
-  joystickBase.value.style.top = `${initialPosition.value.y - 60}px`
+  // Wait for CSS to apply, then get position
+  requestAnimationFrame(() => {
+    if (!joystickBase.value) return
+    const rect = joystickBase.value.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+
+    joystickPosition.value = { x: centerX, y: centerY }
+  })
 }
 
 const handleEnd = () => {
@@ -145,26 +159,26 @@ const handleEnd = () => {
 const initializeJoystick = () => {
   if (!joystickBase.value) return
 
-  const isPortrait = window.innerHeight > window.innerWidth
-  const isMobile = window.innerWidth <= 768 || isPortrait
-
-  let centerX, bottomY
-
-  if (isMobile) {
-    // Mobile positioning: bottom-left corner
-    centerX = 80  // 80px from left edge
-    bottomY = window.innerHeight - 80  // 80px from bottom
-  } else {
-    // Desktop positioning: center bottom
-    centerX = window.innerWidth / 2
-    bottomY = window.innerHeight - 100
+  // Reset to CSS positioning if not dragging
+  if (!isDragging.value) {
+    joystickBase.value.style.position = ''
+    joystickBase.value.style.left = ''
+    joystickBase.value.style.top = ''
+    joystickBase.value.style.transform = ''
   }
 
-  initialPosition.value = { x: centerX, y: bottomY }
-  joystickPosition.value = { x: centerX, y: bottomY }
+  // Wait for CSS to apply, then get position
+  requestAnimationFrame(() => {
+    if (!joystickBase.value) return
+    const rect = joystickBase.value.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
 
-  joystickBase.value.style.left = `${centerX - 60}px`
-  joystickBase.value.style.top = `${bottomY - 60}px`
+    initialPosition.value = { x: centerX, y: centerY }
+    if (!isDragging.value) {
+      joystickPosition.value = { x: centerX, y: centerY }
+    }
+  })
 }
 
 useEventListener(document, 'mousemove', handleMove)
@@ -228,13 +242,16 @@ onUnmounted(() => {
   box-shadow:
     0 8px 25px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  position: absolute;
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .joystick-base:active {
-  transform: scale(0.95);
+  transform: translateX(-50%) scale(0.95);
   box-shadow:
     0 4px 15px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -285,6 +302,7 @@ onUnmounted(() => {
   .joystick-base {
     width: 100px;
     height: 100px;
+    bottom: 80px;
   }
 
   .joystick-knob {
