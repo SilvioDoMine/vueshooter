@@ -1,2 +1,12 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+:root {
+  --ui-primary: #0096ff;
+  --ui-secondary: #ff64c8;
+}
+/* 
+:root {
+    --ui-primary: rgba(0, 150, 255, 0.3);
+    --ui-secondary: rgba(255, 100, 200, 0.3);
+} */

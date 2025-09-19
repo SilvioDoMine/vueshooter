@@ -287,7 +287,11 @@ onUnmounted(() => {
   right: -5px;
   bottom: -5px;
   border-radius: 50%;
-  background: linear-gradient(45deg, rgba(0, 150, 255, 0.3), rgba(255, 100, 200, 0.3));
+  background: linear-gradient(
+    45deg,
+    color-mix(in srgb, var(--ui-primary) 30%,transparent),
+    color-mix(in srgb, var(--ui-secondary) 30%, transparent)
+  );
   z-index: -1;
   opacity: 0;
   transition: opacity 0.3s ease;
