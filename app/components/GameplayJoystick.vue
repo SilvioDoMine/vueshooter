@@ -247,7 +247,6 @@ onUnmounted(() => {
   left: 50%;
   transform: translateX(-50%);
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
 .joystick-base:active {
@@ -302,12 +301,25 @@ onUnmounted(() => {
   .joystick-base {
     width: 100px;
     height: 100px;
-    bottom: 80px;
+    bottom: 120px;
   }
 
   .joystick-knob {
     width: 35px;
     height: 35px;
+  }
+}
+
+/* Specific fix for iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  .joystick-base {
+    bottom: 140px;
+  }
+
+  @media (max-width: 768px), (orientation: portrait) {
+    .joystick-base {
+      bottom: 160px;
+    }
   }
 }
 </style>

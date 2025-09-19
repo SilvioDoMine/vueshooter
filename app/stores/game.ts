@@ -20,7 +20,7 @@ export const useGameStore = defineStore("game", () => {
         { offsetX: 0, offsetZ: 0.8, radius: 0.25, height: 5, rotation: Math.PI / 1 }, // Left and right wing
       ]
     },
-    speed: 30,
+    speed: 10,
     position: new Vector3(0, 0, 0),
     rotation: new Vector3(0, 0, 0),
     velocity: new Vector3(0, 0, 0),

@@ -146,7 +146,7 @@ export class RunTimerScene extends BaseScene {
             // Define o nome do mesh para identificação futura
             mesh.name = `hitbox_cillinder_${index}`;
 
-            playerGroup.scale.set(0.8, 0.8, 0.8); // Ajuste o tamanho conforme necessário
+            playerGroup.scale.set(0.6, 0.6, 0.6); // Ajuste o tamanho conforme necessário
             
             // Adiciona o mesh ao grupo do player
             playerGroup.add(mesh);
