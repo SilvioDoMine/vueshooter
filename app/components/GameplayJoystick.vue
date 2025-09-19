@@ -145,8 +145,20 @@ const handleEnd = () => {
 const initializeJoystick = () => {
   if (!joystickBase.value) return
 
-  const centerX = window.innerWidth / 2
-  const bottomY = window.innerHeight - 100
+  const isPortrait = window.innerHeight > window.innerWidth
+  const isMobile = window.innerWidth <= 768 || isPortrait
+
+  let centerX, bottomY
+
+  if (isMobile) {
+    // Mobile positioning: bottom-left corner
+    centerX = 80  // 80px from left edge
+    bottomY = window.innerHeight - 80  // 80px from bottom
+  } else {
+    // Desktop positioning: center bottom
+    centerX = window.innerWidth / 2
+    bottomY = window.innerHeight - 100
+  }
 
   initialPosition.value = { x: centerX, y: bottomY }
   joystickPosition.value = { x: centerX, y: bottomY }
@@ -269,12 +281,7 @@ onUnmounted(() => {
   opacity: 1;
 }
 
-@media (max-width: 480px) {
-  .joystick-container {
-    bottom: 20px;
-    left: 20px;
-  }
-
+@media (max-width: 768px), (orientation: portrait) {
   .joystick-base {
     width: 100px;
     height: 100px;
