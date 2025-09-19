@@ -1,7 +1,11 @@
 import { defineConfig } from 'vitest/config'
 import { defineVitestProject } from '@nuxt/test-utils/config'
+import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  plugins: [
+    VitePWA({ registerType: 'autoUpdate' }),
+  ],
   test: {
     projects: [
       {

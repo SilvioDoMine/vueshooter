@@ -11,6 +11,8 @@ inputStore.setupEventListeners();
 
 <template>
   <div class="bg-black">
+    <NuxtPwaManifest />
+
     <GameCanvas />
 
     <!-- HTML UI -->

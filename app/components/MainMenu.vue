@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useGameStore } from "~/stores/game";
-import { useInputStore, InputState } from "~/stores/input";
+import { useInputStore, type InputState } from "~/stores/input";
 import { GameStateEnum } from "~/interfaces/types";
 
 const inputStore = useInputStore();
