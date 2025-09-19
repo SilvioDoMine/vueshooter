@@ -5,8 +5,33 @@
   --ui-primary: #0096ff;
   --ui-secondary: #ff64c8;
 }
-/* 
+/*
 :root {
     --ui-primary: rgba(0, 150, 255, 0.3);
     --ui-secondary: rgba(255, 100, 200, 0.3);
 } */
+
+/* Disable zoom and gestures globally */
+html {
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overscroll-behavior: none;
+}
+
+body {
+  touch-action: manipulation;
+  overscroll-behavior: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+* {
+  touch-action: manipulation;
+}
