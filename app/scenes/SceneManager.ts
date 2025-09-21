@@ -5,6 +5,8 @@ import type { BaseScene } from "./BaseScene";
 import { MainMenuScene } from "./MainMenuScene";
 import { LobbyScene } from "./LobbyScene";
 import { InGameScene } from "./InGameScene";
+import { RunTimerScene } from "./RunTimerScene";
+import { RunRoomScene } from "./RunRoomScene";
 
 export class SceneManager implements System {
     private scenes: Map<GameStateEnum, BaseScene> = new Map();
@@ -38,7 +40,7 @@ export class SceneManager implements System {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         
         // Update the current scene
-        this.currentScene.update(deltaTime);
+        this.currentScene.update(deltaTime, this.renderer);
 
         // Render the current scene
         this.renderer.render(this.currentScene.getScene(), this.currentScene.getCamera());
@@ -56,6 +58,9 @@ export class SceneManager implements System {
         this.scenes.set(GameStateEnum.MAIN_MENU, new MainMenuScene());
         this.scenes.set(GameStateEnum.LOBBY, new LobbyScene());
         this.scenes.set(GameStateEnum.IN_GAME, new InGameScene());
+
+        this.scenes.set(GameStateEnum.IN_GAME_1, new RunTimerScene());
+        this.scenes.set(GameStateEnum.IN_GAME_2, new RunRoomScene());
 
         this.ready = true;
         this.setScene(GameStateEnum.MAIN_MENU);
@@ -76,5 +81,47 @@ export class SceneManager implements System {
         //     this.ready = true;
         //     this.setScene(GameStateEnum.MAIN_MENU);
         // });
+    }
+
+    public handleResize(aspect: number): void {
+        console.log('🖥️ SceneManager handling resize:', {
+            size: { width: window.innerWidth, height: window.innerHeight },
+            aspect: aspect.toFixed(3)
+        });
+
+        // Atualizar o renderer
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+
+        // Atualizar a câmera da cena atual se for uma RunTimerScene
+        if (this.currentScene && this.currentScene instanceof RunTimerScene) {
+            this.currentScene.updateCameraForResize(aspect);
+        } else if (this.currentScene) {
+            // Para outras cenas, fazer update básico da câmera
+            const camera = this.currentScene.getCamera();
+            if (camera instanceof THREE.PerspectiveCamera) {
+                camera.aspect = aspect;
+                camera.updateProjectionMatrix();
+            }
+        }
+
+        console.log('📷 Scene camera updated for resize');
+    }
+
+    public dispose(): void {
+
+        // Limpar cenas
+        this.scenes.forEach(scene => {
+            scene.dispose();
+        });
+        
+        this.scenes.clear();
+
+        // Limpar renderer
+        if (this.renderer) {
+            this.renderer.dispose();
+        }
+
+        console.log('✅ SceneManager disposed');
     }
 }

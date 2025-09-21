@@ -14,14 +14,16 @@ export class MainMenuScene extends BaseScene {
     
     init(): void {
         // Initialize scene objects here
+        console.log("MainMenuScene initializing...");
     }
 
     update(deltaTime: number): void {
         // Update scene objects here
-        console.log("MainMenuScene updating...", deltaTime);
+        
     }
 
     dispose(): void {
         // Clean up resources here
+        console.log("MainMenuScene disposed.");
     }
 }
